@@ -637,7 +637,7 @@ def main(argv=None):
     parser.add_argument('--yes', action='store_true', help='do not ask for confirmation')
     parser.add_argument('--reflash', action='store_true', help="(kept for compatibility) 'flash' now always flashes explicitly")
     parser.add_argument('--force', action='store_true', help='skip the BTLD 00003F36 gate')
-    parser.add_argument('--unique-key', action=argparse.BooleanOptionalAction, default=True, help="give this car its OWN unique SSH key (RECOMMENDED, on by default): after enrolling with the shared dev key, generate a per-car key, add it to the unit's authorized_keys over SSH, verify it, then remove the shared dev key. Use --no-unique-key to keep the shared dev key instead")
+    parser.add_argument('--unique-key', action=argparse.BooleanOptionalAction, default=False, help="give this car its OWN unique SSH key (advanced, OFF by default, NOT recommended): after enrolling with the shared dev key, generate a per-car key, add it to the unit's authorized_keys over SSH, verify it, then remove the shared dev key. This can only be done ONCE - after a reflash or a lost key you cannot create a new identity. Default keeps the shared dev key")
     parser.add_argument('--persist', action='store_true', help='after enable/flash, make SSH start on every boot and turn debug mode off (clears the B7F8E5 DTC)')
     parser.add_argument('--keep-debug', action='store_true', help='when persisting, leave debug mode ON (do not run 31 02 A0 FD); the B7F8E5 DTC will remain')
     parser.add_argument('--verbose', action='store_true', help='print every HSFZ frame')

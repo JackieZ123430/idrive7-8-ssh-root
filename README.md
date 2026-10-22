@@ -3,8 +3,8 @@
 Enable the **root SSH service** on BMW MGU head units (iDrive 7 / MGU ID7,
 ID8-BDC3 and ID8-BCP) entirely over the car's **ENET** diagnostic interface -
 just an ENET cable and a laptop. It flashes the debug image, enrolls the SSH
-identity, keeps SSH running with debug mode **off** (no `B7F8E5` DTC), and gives
-each car its own **unique SSH key**.
+identity and keeps SSH running with debug mode **off** (no `B7F8E5` DTC).
+Optionally (advanced, off by default) it can give a car its own **unique SSH key**.
 
 ![MGU iDrive SSH Tool](docs/screenshot.png)
 
@@ -40,12 +40,13 @@ The window (above) has a VIN field + **Detect VIN** (auto-reads it from the car
 over ENET) and three buttons:
 
 - **Flash + Enable** - first-time setup: flash the debug image, enroll, make SSH
-  permanent, and swap in a per-car key.
+  permanent.
 - **Enable** - re-open SSH on an already-flashed unit (no flashing).
 - **Disable** - revert persistence and stop debug/SSH.
 
-Two tick-boxes (both on by default): **Turn debug mode off after enabling**
-(keeps SSH up with no `B7F8E5` DTC) and **Give this car its own unique SSH key**.
+Two tick-boxes: **Turn debug mode off after enabling** (on by default; keeps SSH
+up with no `B7F8E5` DTC) and **Give this car its own unique SSH key** (off by
+default, not recommended - see [below](#a-key-thats-unique-to-the-car-optional-not-recommended)).
 Keys and a ready-to-run `ssh` command are written for you and their location is
 printed in the log. No Python? Build / download the **`.exe`** - see
 [GUI app](#gui-app).
@@ -74,7 +75,7 @@ development, and restoring from a backup fixed it.
    head unit (HU / MGU), and export/save its coding (BimmerCode keeps a backup
    of each module it writes; some tools also let you "read FA/coding" and save
    it). BMW dealer tools (ISTA/E-Sys) can also save a full backup.
-2. **Flash + enable SSH** with this tool and grab your per-car SSH key.
+2. **Flash + enable SSH** with this tool and grab the SSH key it saves for you.
 3. **After flashing** - if any functions misbehave or coding looks reset,
    restore the saved coding for the head unit with the same tool. In BimmerCode
    this is its restore/undo of the module you backed up.
@@ -182,7 +183,12 @@ metadata.json      VIN, arch, mgu_ip, challenge, timestamp, fingerprints
 
 Private keys are `chmod 600`, and `data/enrollments/` is git-ignored.
 
-### A key that's actually unique to the car (default)
+### A key that's unique to the car (optional, not recommended)
+
+> **Off by default.** The key swap can only be done **once**. If you reflash the
+> unit, run the tool again, or lose the per-car key, you **cannot create a new
+> identity** and may lose SSH access. Only turn this on if you know exactly why
+> you need it and will keep the key safe.
 
 Since enrollment can't change which key the unit trusts, the only way to a
 per-car key is to log in with the baked key and edit the unit's real
@@ -190,14 +196,13 @@ per-car key is to log in with the baked key and edit the unit's real
 `/usr/share/sshd/authorized_keys.root` (per `sshd_config`), **not**
 `~/.ssh/authorized_keys`, and the rootfs is mounted read-only - so the tool
 resolves the actual `AuthorizedKeysFile`, remounts `/` read-write just while it
-edits, writes the key, and remounts read-only again. The tool does this **by
-default** (recommended) on every `enable` / `flash`, as a **replace**. Pass
-`--no-unique-key` (or untick the GUI box) to keep the shared baked key instead.
+edits, writes the key, and remounts read-only again. The tool does this only
+when you pass `--unique-key` (or tick the GUI box), as a **replace**. By default
+the shared baked key is kept.
 
 ```
-python ssh_enable.py enable                 # unique per-car key (default)
-python ssh_enable.py flash --vin ...        # same
-python ssh_enable.py enable --no-unique-key # keep the shared dev key
+python ssh_enable.py enable                 # keep the shared dev key (default)
+python ssh_enable.py enable --unique-key    # swap in a per-car key (one-time, advanced)
 ```
 
 1. enroll + log in with the baked key (as usual);

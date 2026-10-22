@@ -88,7 +88,7 @@ class App:
         self.mgu_ip = tk.StringVar()
         self.arch = tk.StringVar(value=ID7)
         self.disable_debug = tk.BooleanVar(value=True)
-        self.unique_key = tk.BooleanVar(value=True)
+        self.unique_key = tk.BooleanVar(value=False)
 
         self._style()
         self._build()
@@ -170,9 +170,9 @@ class App:
                         variable=self.disable_debug).pack(anchor="w")
         ttk.Label(opt, text="On = SSH stays up with debug off (recommended).  Off = SSH persistent but debug mode stays on.",
                   style="Hint.TLabel").pack(anchor="w")
-        ttk.Checkbutton(opt, text="Give this car its own unique SSH key  (recommended)",
+        ttk.Checkbutton(opt, text="Give this car its own unique SSH key  (advanced - NOT recommended)",
                         variable=self.unique_key).pack(anchor="w", pady=(6, 0))
-        ttk.Label(opt, text="Enrolls with the shared dev key, then swaps in a per-car key on the unit. Dev key stays as fallback if the swap can't be verified.",
+        ttk.Label(opt, text="Swaps the shared dev key for a per-car key. Can only be done ONCE - if you lose the key or reflash, you can't create a new identity. Leave off unless you know why you need it.",
                   style="Hint.TLabel").pack(anchor="w")
 
         self.action_buttons = [self.btn_flash, self.btn_enable, self.btn_disable]
