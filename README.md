@@ -296,3 +296,8 @@ MGU-SSH.spec, build_exe.bat PyInstaller build of the Windows .exe
 
 Keep `data/` next to `ssh_enable.py`; the private keys are what get you into
 the unit - treat them like passwords.
+
+## License
+
+Released into the **public domain** under [The Unlicense](LICENSE) - do whatever
+you want with it, no attribution required.
