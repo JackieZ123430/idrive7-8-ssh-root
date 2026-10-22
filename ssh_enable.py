@@ -422,6 +422,9 @@ class Tool:
         else:
             log('Could not remove the shared dev key (it may be in a read-only image); '
                 'this car\'s unique key works, and the dev key still works as a fallback.')
+        log('NOTE: if the new key does not connect yet, force-restart the head '
+            'unit - press and HOLD the volume/power knob ~20-30 s until it reboots '
+            '- so it comes back up loaded with the new key.')
         return percar
 
     def enable(self):

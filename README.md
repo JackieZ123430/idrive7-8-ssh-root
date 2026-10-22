@@ -206,6 +206,11 @@ python ssh_enable.py enable --no-unique-key # keep the shared dev key
 3. verify login with the new key over a fresh connection;
 4. **only then** remove the baked key line, so the car accepts only its own key.
 
+> **If the new key doesn't connect right away, force-restart the head unit:**
+> press and **hold the volume / power knob for ~20-30 s** until the screen goes
+> dark and the unit reboots. It comes back up loaded with the new key. (This was
+> needed on a real car after the key swap.)
+
 The per-car key (all formats) + `connect.txt` replace the dev-key bundle in
 `data/enrollments/<VIN>/`. Safety: if step 3 can't be verified, the dev key is
 left in place so you never lose access; and if `authorized_keys` sits on a
