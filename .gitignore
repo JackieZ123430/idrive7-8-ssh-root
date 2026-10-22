@@ -1,0 +1,8 @@
+# Per-car SSH keys generated at enrollment - never commit private keys
+data/enrollments/
+
+# Python / PyInstaller build artifacts
+__pycache__/
+*.pyc
+build/
+dist/
