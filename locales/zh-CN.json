@@ -1,9 +1,6 @@
 {
   "name": "简体中文",
-  "translator": "翻译者：抖音：小白科技杂物社 · BiliBili：小白151 · GitHub：JackieZ123430",
-  "title_credit": "小白科技杂物社 · BiliBili 小白151 · GitHub JackieZ123430",
   "strings": {
-    "MGU iDrive SSH Tool": "MGU iDrive SSH 工具",
     "BMW ID7 / ID8  •  root over ENET": "BMW ID7 / ID8  •  通过 ENET 开启 root SSH",
     "VIN": "VIN",
     "Detect VIN": "读取 VIN",

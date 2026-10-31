@@ -23,7 +23,6 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(self.tr.language, 'en')
         raw = '[12:34:56] SSH OK as root: uid=0(root)\n'
         self.assertEqual(self.tr.log(raw), raw)
-        self.assertFalse(self.tr.credit)
         self.tr.select('zh-CN')
         self.assertEqual(self.tr.t('Uncatalogued error'), 'Uncatalogued error')
         self.assertEqual(self.tr.log('RAW 31 02 A0 FD\n'), 'RAW 31 02 A0 FD\n')
@@ -107,19 +106,35 @@ class GuiTests(unittest.TestCase):
         app._busy(True)
         self.select('简体中文')
         self.assertEqual(app.btn_enable.cget('text'), '启用 SSH')
-        self.assertIn('JackieZ123430', self.root.title())
-        self.assertIn('BiliBili：小白151', app.credit_label.cget('text'))
-        text = app.out.get('1.0', 'end')
+        self.assertEqual(self.root.title(), 'MGU iDrive SSH Tool')
+        text = app.out.get('1.0', 'end-1c')
         self.assertIn('正在检查调试/SSH 状态', text)
-        self.assertIn('翻译者：', text)
+        self.assertEqual(text, app.i18n.log('Checking debug/SSH state...\n'))
         self.assertEqual(app.status.cget('text'), '正在处理…')
         self.assertIn('disabled', app.btn_enable.state())
         self.assertEqual(args, app._common_args() + app._persist_args())
         self.select('English')
         self.assertEqual(app.btn_enable.cget('text'), 'Enable')
         self.assertEqual(self.root.title(), 'MGU iDrive SSH Tool')
-        self.assertEqual(app.credit_label.cget('text'), '')
         self.assertEqual(app.out.get('1.0', 'end').strip(), 'Checking debug/SSH state...')
+
+    def test_catalog_credits_never_render(self):
+        marker = 'TRANSLATOR_CREDIT_MUST_STAY_IN_README'
+        for catalog in self.app.i18n.catalogs.values():
+            catalog['translator'] = marker
+            catalog['title_credit'] = marker
+            catalog.setdefault('strings', {})['MGU iDrive SSH Tool'] = marker
+        self.assertEqual(self.app.out.get('1.0', 'end-1c'), '')
+        for language in ('简体中文', 'English', '简体中文'):
+            self.select(language)
+            self.assertEqual(self.root.title(), 'MGU iDrive SSH Tool')
+            self.assertEqual(self.app.out.get('1.0', 'end-1c'), '')
+            pending = [self.root]
+            while pending:
+                widget = pending.pop()
+                pending.extend(widget.winfo_children())
+                if 'text' in widget.keys():
+                    self.assertNotIn(marker, str(widget.cget('text')))
 
     def test_buttons_send_identical_actions_in_both_languages(self):
         for language in ('English', '简体中文'):

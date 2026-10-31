@@ -152,13 +152,6 @@ class App:
             state="readonly", width=14)
         self.language_box.pack(anchor="e")
         self.language_box.bind("<<ComboboxSelected>>", self._change_language)
-        # A second header row keeps the credit and selector clear at small widths.
-        header.pack_propagate(True)
-        self.credit_row = tk.Frame(self.root, bg=HEADER)
-        self.credit_label = tk.Label(self.credit_row, bg=HEADER, fg="#7186a5",
-                                    font=("Segoe UI", 8))
-        self.credit_label.pack(anchor="e", padx=12, pady=(0, 4))
-
         body = ttk.Frame(self.root, padding=16)
         body.pack(fill="x")
 
@@ -230,22 +223,12 @@ class App:
         self.i18n.select(tag)
         for widget, source in self._labels:
             widget.configure(text=self.i18n.t(source))
-        title = self.i18n.t("MGU iDrive SSH Tool")
-        title_credit = self.i18n.catalogs[tag].get('title_credit', '') if tag != 'en' else ''
-        self.root.title(title + (" | " + title_credit if title_credit else ""))
-        self.credit_label.configure(text=self.i18n.credit)
-        if self.i18n.credit:
-            self.credit_row.pack(fill="x", after=self.root.winfo_children()[0])
-        else:
-            self.credit_row.pack_forget()
         self.status.configure(text=self.i18n.t("Working…" if self._is_busy else "Ready."))
         # Re-render from raw history; switching languages does not lose diagnostic data.
         self.out.configure(state="normal")
         self.out.delete("1.0", "end")
         for text in self._history:
             self.out.insert("end", self.i18n.log(text))
-        if self.i18n.credit:
-            self.out.insert("end", "\n" + self.i18n.credit + "\n")
         self.out.see("end")
         self.out.configure(state="disabled")
 

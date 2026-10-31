@@ -9,8 +9,6 @@ Each UTF-8 `locales/<language-tag>.json` contains:
 ```json
 {
   "name": "Language name shown in the selector",
-  "translator": "Optional translator credit in the header and GUI log",
-  "title_credit": "Optional credit appended to the window title",
   "strings": {
     "Detect VIN": "Translation of Detect VIN"
   },
@@ -37,10 +35,9 @@ Translated log messages retain their original English line prefixed with `[EN]`.
 Unmatched logs, protocol dumps, remote script output and third-party errors stay
 unchanged. Switching languages re-renders the original in-memory history.
 
-`en.json` has no translator credit. The supplied `zh-CN.json` credits:
-**抖音：小白科技杂物社 · BiliBili：小白151 · GitHub：JackieZ123430**.
-Other languages can provide their own optional credits. English presentation
-suppresses credits even if they are accidentally added to `en.json`.
+Keep translator attribution in the relevant README only. The window title stays
+`MGU iDrive SSH Tool` in every language; the GUI and diagnostic logs do not
+display translator credits.
 
 Add a JSON file and restart the source GUI, or rebuild with `build_exe.bat`.
 `MGU-SSH.spec` bundles the whole directory relative to `i18n.py`, including for

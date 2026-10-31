@@ -1,8 +1,4 @@
-"""JSON-backed presentation translations; diagnostic operations stay unchanged.
-
-Simplified Chinese translation: 抖音：小白科技杂物社 · BiliBili：小白151 ·
-GitHub：JackieZ123430. Further languages can supply their own translator credit.
-"""
+"""JSON-backed presentation translations; diagnostic operations stay unchanged."""
 import json
 from pathlib import Path
 import re
@@ -24,12 +20,6 @@ class Translator:
         if language not in self.catalogs:
             raise ValueError('Unknown language: ' + language)
         self.language = language
-
-    @property
-    def credit(self):
-        if self.language == 'en':
-            return ''
-        return self.catalogs[self.language].get('translator', '')
 
     def t(self, source):
         return self.catalogs[self.language].get('strings', {}).get(source, source)
